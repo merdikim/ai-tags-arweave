@@ -24,7 +24,7 @@ function App() {
     queryKey: ['create-tags', text ],
     queryFn: async () => {
       if(!text) return {}
-      const res = await fetch("https://45.56.119.30:9090/generate-tags", { method: "POST", headers: { "Content-Type": "application/json" }, body:JSON.stringify({text:message})})
+      const res = await fetch("https://45.56.119.30/generate-tags", { method: "POST", headers: { "Content-Type": "application/json" }, body:JSON.stringify({text:message})})
       const data = await res.json()
       return data.tags || []
     }
