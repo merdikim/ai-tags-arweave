@@ -24,7 +24,7 @@ function App() {
     queryKey: ['create-tags', text ],
     queryFn: async () => {
       if(!text) return {}
-      const res = await fetch("http://localhost:9090/generate-tags", { method: "POST", headers: { "Content-Type": "application/json" }, body:JSON.stringify({text:message})})
+      const res = await fetch("https://45.56.119.30:9090/generate-tags", { method: "POST", headers: { "Content-Type": "application/json" }, body:JSON.stringify({text:message})})
       const data = await res.json()
       return data.tags || []
     }
@@ -103,8 +103,9 @@ function App() {
       <div className="w-full max-w-[700px] mt-6">
         <h3 className="font-semibold mb-10">Tags</h3>
         <div className="max-h-[400px] overflow-scroll">
-          {!isLoading && <pre>{JSON.stringify(tags, null, 2)}</pre>}
+          {(!isLoading && !error) && <pre>{JSON.stringify(tags, null, 2)}</pre>}
           {isLoading &&<i>Loading tags...</i>}
+          {error &&<i>Something went wrong while generating tags. Try again later </i>}
         </div>
       </div>
     </div>
