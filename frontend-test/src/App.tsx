@@ -40,16 +40,22 @@ function App() {
 
   const handleFileChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    if (!selectedFile) return setFile(null);
-
+    if (!selectedFile) {
+      setMessage("")
+      setText("")
+      setFile(null);
+      return 
+    } 
     const ext = getExtension(selectedFile.name);
     const isValid =
       allowedExtensions.includes(ext) &&
       (allowedMimes.includes(selectedFile.type) || selectedFile.type === "");
 
     if (!isValid) {
-      alert("Only PDF, Word (.doc/.docx), or Markdown (.md/.markdown) files are allowed.");
+      alert("Only Markdown (.md/.markdown) files are allowed.");
       e.target.value = ""; // reset invalid file
+      setMessage("")
+      setText("")
       setFile(null);
       return;
     }
