@@ -39,4 +39,4 @@ export const readDocument = async(file:File) => {
 
 
 
-export const allowedExtensions = [".pdf", ".doc", ".docx", ".md", ".markdown"];
+export const allowedExtensions = [".md", ".markdown"];

@@ -2,11 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { allowedExtensions, readDocument } from "./utils";
 import file_icon from "./assets/file.svg"
+import { generateTags } from "./lib/ai";
 
   const allowedMimes = [
-    "application/pdf",
-    "application/msword",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "text/markdown",
     "text/x-markdown",
     "text/plain"
@@ -24,9 +22,10 @@ function App() {
     queryKey: ['create-tags', text ],
     queryFn: async () => {
       if(!text) return {}
-      const res = await fetch("https://45.56.119.30/generate-tags", { method: "POST", headers: { "Content-Type": "application/json" }, body:JSON.stringify({text:message})})
-      const data = await res.json()
-      return data.tags || []
+      const tags = await generateTags(message)
+      //console.log(tags)
+     
+      return tags || []
     }
   });
 
@@ -57,6 +56,7 @@ function App() {
 
     const fileText = await readDocument(selectedFile)
     setMessage(fileText || "")
+    setText(fileText || "")
 
     setFile(selectedFile);
     console.log("Accepted file:", selectedFile.name, selectedFile.type);
@@ -85,7 +85,7 @@ function App() {
 
         <div className="">
 
-              <input type="file" accept=".pdf,application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.md,.markdown,text/markdown" name="file" id="file" onChange={handleFileChange} hidden/>
+              <input type="file" accept=".md,.markdown,text/markdown, text/plain" name="file" id="file" onChange={handleFileChange} hidden/>
               <label htmlFor="file"><img src={file_icon} className="group-hover:rotate-90 cursor-pointer transition-transform duration-200" /></label>
         </div>
         <textarea
